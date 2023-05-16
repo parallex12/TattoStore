@@ -327,7 +327,7 @@ const FormLeft = (props) => {
           </View>
           {/* Field 7 Starts here */}
           <View style={styles.formFieldStyle7Wrapper}>
-            <Text style={styles.formFieldStyle2Text}>Precio de pago</Text>
+            <Text style={styles.formFieldStyle2Text}>Precio deposito</Text>
             <View style={styles.formFieldStyle7}>
               <TextInput
                 style={styles.builtinInput}
@@ -346,7 +346,7 @@ const FormLeft = (props) => {
 
       {/* Field 6 and 7 ends here */}
       <View style={styles.rowFieldWrappers2}>
-        <View style={styles.formFieldStyle8Wrapper}>
+        {/* <View style={styles.formFieldStyle8Wrapper}>
           <Text style={styles.formFieldStyle8WrapperFieldText}>
             Precio a pagar por el sercicio
           </Text>
@@ -360,7 +360,7 @@ const FormLeft = (props) => {
             }
             value={props?.formData?.servicePrice}
           />
-        </View>
+        </View> */}
         <TouchableOpacity
           style={styles.formSubmitBtn}
           onPress={props?.onSubmit}

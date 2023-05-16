@@ -50,7 +50,7 @@ const DropDown = (props) => {
       fontFamily: "IR",
     },
     itemCont: {
-      backgroundColor: "#fff",
+      backgroundColor: color?.bg,
       zIndex: 99999999999,
     },
   });

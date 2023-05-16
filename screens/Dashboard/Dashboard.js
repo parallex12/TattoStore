@@ -29,7 +29,16 @@ const Dashboard = (props) => {
   let color = props?.color_scheme;
   const auth = getAuth();
   const user = auth.currentUser;
-
+  let todayObject = new Date().toUTCString().split(" ");
+  const today =
+    todayObject[0] +
+    " " +
+    todayObject[1] +
+    " " +
+    todayObject[2] +
+    " " +
+    todayObject[3];
+    
   let calendarData = [
     { day: "Lunes 2", month: "Enero" },
     { day: "Martes 12", month: "Enero" },
@@ -201,7 +210,7 @@ const Dashboard = (props) => {
           {!loading && (
             <ScrollView>
               <View style={styles.block}>
-                <Text style={styles.blockText}>Hoy es 11 abril 2022</Text>
+                <Text style={styles.blockText}>Hoy es {today}</Text>
               </View>
               {/* Appiontment Cards starts here */}
               <View style={styles.cardWrapper}>

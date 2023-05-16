@@ -27,7 +27,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 
 const ImagePreview = (props) => {
   let color = props?.color_scheme;
@@ -37,6 +37,7 @@ const ImagePreview = (props) => {
   const savedScale = useSharedValue(1);
   const positionX = useSharedValue(0);
   const savedPositionX = useSharedValue(0);
+  let fulImgWidth = props.fullScreenIsOpen ? { width: "100%" } : {};
 
   const positionY = useSharedValue(0);
   const savedPositionY = useSharedValue(0);
@@ -51,7 +52,7 @@ const ImagePreview = (props) => {
 
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
-      console.log(e.message)
+      console.log(e.message);
       scale.value = savedScale.value * e.scale;
     })
     .onEnd(() => {
@@ -111,7 +112,13 @@ const ImagePreview = (props) => {
   };
 
   return (
-    <View style={{ overflow: "hidden" }}>
+    <View style={[styles(color, fulImgWidth).fullImgWrapper, fulImgWidth]}>
+      <TouchableOpacity
+        onPress={() => props?.setFullScreenIsOpen((prev) => !prev)}
+        style={styles(color)?.fullIconView}
+      >
+        <MaterialIcons name="fullscreen" size={rf(20)} color={color?.bg} />
+      </TouchableOpacity>
       <TouchableOpacity style={styles(color)?.resetBtn} onPress={reset}>
         <Feather name="refresh-ccw" size={24} color={color?.text} />
       </TouchableOpacity>
@@ -148,6 +155,23 @@ const styles = (color) =>
       width: wp("50%"),
       height: hp("65%"),
     },
+    fullImgWrapper: {
+      overflow: "hidden",
+      backgroundColor: color.bg,
+      height: "95%",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    fullIconView: {
+      position: "absolute",
+      right: 7,
+      top: 7,
+      zIndex: 90000,
+      width: hp("4%"),
+      height: hp("4%"),
+      borderRadius: 100,
+      backgroundColor: color?.buttonPrimary,
+    },
     tattoWrapper: {
       width: wp("50%"),
       height: hp("65%"),
@@ -158,6 +182,8 @@ const styles = (color) =>
     resetBtn: {
       position: "absolute",
       zIndex: 999999999999,
+      left: 7,
+      top: 7,
     },
   });
 

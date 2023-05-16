@@ -43,13 +43,14 @@ const Form = (props) => {
   let clientDetails = sessionDetails?.clientSelected?.data;
   let agentDetails = sessionDetails?.agentDetails?.data;
   let totalBalanceByHour =
-    sessionDetails?.agentDetails?.data?.sessionRate * completedTime?.hours;
+    sessionDetails?.agentDetails?.data?.sessionRate * completedTime?.seconds;
   const toHoursAndMinutes = (totalMinutes) => {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     const seconds = 0;
     return { hours, minutes, seconds };
   };
+  let remainingPayment = sessionDetails?.budget - sessionDetails?.paymentPrice;
 
   useEffect(() => {
     if (currentSession != null) {
@@ -85,9 +86,7 @@ const Form = (props) => {
         props?.sessionPriceMode == "Timer" ? "Fixed" : "Timer"
       );
     } else {
-      alert(
-        props?.currentSession != null ? "Do Signature" : "Select session."
-      );
+      alert(props?.currentSession != null ? "Do Signature" : "Select session.");
     }
   };
 
@@ -227,18 +226,6 @@ const Form = (props) => {
       {/* Form starts here */}
       <View style={styles.formWrapper}>
         <TouchableOpacity
-          style={styles.formBtnWrapper}
-          onPress={() => onChangePriceMode()}
-        >
-          <Text style={styles.formBtnText}>Cecion por tiempo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.formBtnWrapper, { height: hp("5%") }]}
-          onPress={() => setIsSignatureModuleOpen((prev) => !prev)}
-        >
-          <Text style={styles.formBtnText}>Firmar concentimento</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
           onPress={onSelectSession}
           style={[styles.formFieldWrapper, { marginTop: hp("0.5%") }]}
         >
@@ -261,6 +248,19 @@ const Form = (props) => {
             {sessionDetails?.category || "Buscar cita"}
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.formBtnWrapper}
+          onPress={() => onChangePriceMode()}
+        >
+          <Text style={styles.formBtnText}>Cecion por tiempo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.formBtnWrapper, { height: hp("5%") }]}
+          onPress={() => setIsSignatureModuleOpen((prev) => !prev)}
+        >
+          <Text style={styles.formBtnText}>Firmar concentimento</Text>
+        </TouchableOpacity>
+
         <View style={[styles.RowFieldsWrapper, { marginTop: hp("0.5%") }]}>
           <Text style={styles.fieldLabel}>Tatuador o Anillador</Text>
           <Text style={styles.fieldLabel}>Servicos</Text>
@@ -335,36 +335,78 @@ const Form = (props) => {
         </View>
 
         <View style={[styles.RowFieldsWrapper, { marginTop: hp("0.5%") }]}>
-          <Text style={styles.fieldLabel}>Método de Pago </Text>
-          <Text style={styles.fieldLabel}>Precio de pago</Text>
+          {props?.sessionPriceMode == "Timer" ? (
+            <>
+              <Text style={styles.fieldLabel}>Precio deposito</Text>
+              <Text style={styles.fieldLabel}>Tarifa por hora </Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.fieldLabel}>Método de Pago </Text>
+              <Text style={styles.fieldLabel}>Precio deposito</Text>
+            </>
+          )}
         </View>
         <View style={styles.RowFieldsWrapper}>
-          <View
-            style={[
-              styles.formFieldWrapper,
-              { flex: 1, marginRight: "1.5%", height: hp("3.5%") },
-            ]}
-          >
-            <TextInput
-              style={styles.textFieldText}
-              value={sessionDetails?.paymentMethod || ""}
-            />
-          </View>
-          <View
-            style={[
-              styles.formFieldWrapper,
-              { flex: 1, marginLeft: "1.5%", height: hp("3.5%") },
-            ]}
-          >
-            <TextInput
-              style={styles.textFieldText}
-              value={
-                props?.sessionPriceMode == "Timer"
-                  ? sessionDetails?.agentDetails?.data?.sessionRate
-                  : sessionDetails?.paymentPrice
-              }
-            />
-          </View>
+          {props?.sessionPriceMode == "Timer" ? (
+            <>
+              <View
+                style={[
+                  styles.formFieldWrapper,
+                  { flex: 1, marginRight: "1.5%", height: hp("3.5%") },
+                ]}
+              >
+                <TextInput
+                  style={styles.textFieldText}
+                  editable={false}
+                  value={sessionDetails?.paymentPrice}
+                />
+              </View>
+              <View
+                style={[
+                  styles.formFieldWrapper,
+                  { flex: 1, marginLeft: "1.5%", height: hp("3.5%") },
+                ]}
+              >
+                <TextInput
+                  style={styles.textFieldText}
+                  value={sessionDetails?.agentDetails?.data?.sessionRate}
+                  editable={false}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <View
+                style={[
+                  styles.formFieldWrapper,
+                  { flex: 1, marginRight: "1.5%", height: hp("3.5%") },
+                ]}
+              >
+                <TextInput
+                  style={styles.textFieldText}
+                  value={sessionDetails?.paymentMethod || ""}
+                  editable={false}
+                />
+              </View>
+              <View
+                style={[
+                  styles.formFieldWrapper,
+                  { flex: 1, marginLeft: "1.5%", height: hp("3.5%") },
+                ]}
+              >
+                <TextInput
+                  style={styles.textFieldText}
+                  editable={false}
+                  value={
+                    props?.sessionPriceMode == "Timer"
+                      ? sessionDetails?.agentDetails?.data?.sessionRate
+                      : sessionDetails?.paymentPrice
+                  }
+                />
+              </View>
+            </>
+          )}
         </View>
 
         {props?.sessionPriceMode == "Timer" && (
@@ -399,7 +441,7 @@ const Form = (props) => {
                 style={styles.actionButtons}
                 onPress={() => currentSession != null && setTimerStatus("stop")}
               >
-                <Text style={styles.formBtnText}>Stop</Text>
+                <Text style={styles.formBtnText}>Pausa</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.actionButtons}
@@ -407,7 +449,7 @@ const Form = (props) => {
                   currentSession != null && setTimerStatus("finish")
                 }
               >
-                <Text style={styles.formBtnText}>Stop Finish</Text>
+                <Text style={styles.formBtnText}>Terminar</Text>
               </TouchableOpacity>
             </View>
           </>
@@ -420,7 +462,7 @@ const Form = (props) => {
           ]}
         >
           <Text style={[styles.fieldLabel2, { marginVertical: 2 }]}>
-            Precio a pagar por el sercicio
+            Precio restante de pagar
           </Text>
           <View style={[styles.fieldType2, { height: hp("3%") }]}>
             <TextInput
@@ -429,8 +471,11 @@ const Form = (props) => {
               placeholderTextColor={color?.text}
               value={
                 props?.sessionPriceMode == "Timer"
-                  ? "€" + totalBalanceByHour?.toString()
-                  : sessionDetails?.servicePrice
+                  ? "€" +
+                    eval(
+                      totalBalanceByHour - sessionDetails?.paymentPrice
+                    )?.toString()
+                  : "€" + remainingPayment.toString()
               }
             />
           </View>

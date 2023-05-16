@@ -99,7 +99,7 @@ const ClientDetailsForm = (props) => {
       width: wp("20%"),
       minHeight: hp("8%"),
       maxHeight: hp("27%"),
-      backgroundColor: "#fff",
+      backgroundColor: color?.bg,
       position: "absolute",
       top: hp("4.3%"),
       right: 0,
@@ -143,7 +143,7 @@ const ClientDetailsForm = (props) => {
     searchBarWrapper: {
       width: "100%",
       height: hp("4%"),
-      backgroundColor: "#fff",
+      backgroundColor: color?.bg,
       borderRadius: 5,
       borderWidth: 0.5,
       paddingHorizontal: 5,
@@ -151,6 +151,7 @@ const ClientDetailsForm = (props) => {
       alignItems: "center",
       justifyContent: "space-between",
       marginBottom: 5,
+      borderColor:color?.text
     },
     searchTextInput: {
       fontSize: rf(5),
@@ -215,7 +216,7 @@ const ClientDetailsForm = (props) => {
               placeholderTextColor={color?.text}
               onChangeText={(val) => setSearchClientText(val?.toLowerCase())}
             />
-            <AntDesign name="search1" size={rf(10)} color="black" />
+            <AntDesign name="search1" size={rf(10)} color={color?.text} />
           </View>
           <ScrollView>
             {props?.memoizeClients

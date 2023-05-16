@@ -50,7 +50,6 @@ const CreateAgendaPopup = (props) => {
     serviceNotes: null,
     paymentMethod: null,
     paymentPrice: null,
-    servicePrice: null,
     tattooImage: null,
     clientComeFrom: null,
     status: "Pending",
@@ -58,7 +57,7 @@ const CreateAgendaPopup = (props) => {
 
   useEffect(() => {
     setShowPopup(props?.create_agenda_popup);
-    setCalendarPopup(false)
+    setCalendarPopup(false);
   }, [props?.create_agenda_popup]);
 
   useEffect(() => {
@@ -176,7 +175,7 @@ const CreateAgendaPopup = (props) => {
       alert("Fill all details");
     } else {
       setLoading(true);
-      props?.createAppiontment(formData,setLoading)
+      props?.createAppiontment(formData, setLoading);
     }
     // setLoading(true);
     // props?.createAppiontment(formData, setLoading);

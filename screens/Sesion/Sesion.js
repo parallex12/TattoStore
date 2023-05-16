@@ -29,6 +29,7 @@ const Sesion = (props) => {
   const [sessionPriceMode, setSessionPriceMode] = useState("Timer");
   const [currentSession, setCurrentSession] = useState(null);
   const [isSessionModalOpen, setIsSessionModalOpen] = useState(false);
+  const [fullScreenIsOpen, setFullScreenIsOpen] = useState(false);
   const [customerSignature, setCustomerSignature] = useState(null);
   const [imageSpecs, setImageSpecs] = useState({ roatate: 0, zoom: 0 });
   const imageAnime = useRef(new Animated.Value(0)).current;
@@ -37,6 +38,8 @@ const Sesion = (props) => {
   const [buscarCita, setBuscarCita] = useState(false);
   const [isSignatureModuleOpen, setIsSignatureModuleOpen] = useState(false);
   let tattooImage = currentSession?.data?.tattooImage;
+
+  console.log(currentSession)
 
   const styles = StyleSheet.create({
     container: {
@@ -112,7 +115,18 @@ const Sesion = (props) => {
         isSessionModalOpen={isSessionModalOpen}
         setCurrentSession={setCurrentSession}
       />
-      <Header type="worker" />
+      <Header
+        type="worker"
+        fullScreenComponent={
+          fullScreenIsOpen ? (
+            <ImagePreview
+              tattooImage={tattooImage}
+              setFullScreenIsOpen={setFullScreenIsOpen}
+              fullScreenIsOpen={fullScreenIsOpen}
+            />
+          ) : null
+        }
+      />
       <View style={styles.body}>
         <SideMenu active="Sesion" navigation={props?.navigation} />
         <View style={styles.contentWrapper}>
@@ -127,7 +141,10 @@ const Sesion = (props) => {
               {/* <ScrollView> */}
               <View style={styles.innerContainer}>
                 {/* tatoo Wrapper */}
-                <ImagePreview tattooImage={tattooImage} />
+                <ImagePreview
+                  tattooImage={tattooImage}
+                  setFullScreenIsOpen={setFullScreenIsOpen}
+                />
                 {/* tatoo Wrapper */}
 
                 {/* Form starts here */}

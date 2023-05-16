@@ -106,16 +106,31 @@ const Header = (props) => {
       color: color?.text,
       fontFamily: "IM",
     },
+    fullScreenWrapper: {
+      position: "absolute",
+      height: hp("100%"),
+      width: wp("100%"),
+      backgroundColor: color.bg,
+      zIndex: 10,
+      alignItems: "center",
+      justifyContent: "center",
+    },
   });
 
   const onSwitchAccount = async () => {
     navigation?.navigate(type == "admin" ? "Dashboard" : "AdminDashboard");
-    setMenuShow(false)
+    setMenuShow(false);
   };
 
   return (
     <>
       <View style={styles.container}>
+        {/* Full Screen Component */}
+        {props?.fullScreenComponent && (
+          <View style={styles.fullScreenWrapper}>
+            {props?.fullScreenComponent}
+          </View>
+        )}
         <CreateAgendaPopup />
         <View style={styles.headerBody}>
           <TouchableOpacity
