@@ -327,7 +327,7 @@ const FormLeft = (props) => {
           </View>
           {/* Field 7 Starts here */}
           <View style={styles.formFieldStyle7Wrapper}>
-            <Text style={styles.formFieldStyle2Text}>Precio deposito</Text>
+            <Text style={styles.formFieldStyle2Text}>Precio depositoy</Text>
             <View style={styles.formFieldStyle7}>
               <TextInput
                 style={styles.builtinInput}
