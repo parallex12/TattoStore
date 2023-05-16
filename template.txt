@@ -1,0 +1,40 @@
+import React, { useEffect, useState, useRef } from "react";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { RFValue as rf } from "react-native-responsive-fontsize";
+import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
+import { connect } from "react-redux";
+import { colorScheme } from "../../state-management/actions/Theme";
+
+const Dashboard = (props) => {
+  const [loading, setLoading] = useState(true);
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: props?.color_scheme?.bg,
+    },
+    loader: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="black" />
+      </View>
+    );
+  }
+
+  return <View style={styles.container}></View>;
+};
+
+const mapStateToProps = (state) => ({
+  errors: state.errors.errors,
+  color_scheme: state.main.color_scheme,
+});
+export default connect(mapStateToProps, { colorScheme })(Dashboard);
